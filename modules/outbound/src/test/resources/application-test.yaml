@@ -1,0 +1,9 @@
+# 실 배포시 github action에서 github secret을 사용하거나, AWS Secret manager를 통해 key가 관리되어야합니다.
+
+blog:
+  search:
+    kakao:
+      apiKey: "3fe1d1cf3d8a9924be09220c78cd6280"
+    naver:
+      clientId: "0OneZosq6U7J2lPRbv5q"
+      clientSecret: "iRW6lbWFzq"

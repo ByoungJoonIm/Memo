@@ -1,5 +1,6 @@
 package bj.max.lim.blog.search.outbound.webclient.client
 
+import bj.max.lim.blog.search.outbound.webclient.configuration.KakaoBlogSearchProperties
 import bj.max.lim.blog.search.outbound.webclient.request.KakaoBlogSearchRequest
 import bj.max.lim.blog.search.outbound.webclient.response.KakaoBlogSearchResponse
 import org.springframework.http.HttpHeaders
@@ -10,10 +11,11 @@ import reactor.core.publisher.Mono
 @Component
 class KakaoBlogSearchClient(
     webClientBuilder: WebClient.Builder,
+    kakaoBlogSearchProperties: KakaoBlogSearchProperties,
 ) {
     private val webClient = webClientBuilder
         .baseUrl(BASE_URL)
-        .defaultHeader(HttpHeaders.AUTHORIZATION, "KakaoAK $API_KEY")
+        .defaultHeader(HttpHeaders.AUTHORIZATION, "KakaoAK ${kakaoBlogSearchProperties.apiKey}")
         .build()
 
     suspend fun send(request: KakaoBlogSearchRequest): Mono<KakaoBlogSearchResponse> {
@@ -30,8 +32,5 @@ class KakaoBlogSearchClient(
     companion object {
         val BASE_URL = "https://dapi.kakao.com/v2"
         val BLOG_SEARCH_URL = "/search/blog"
-
-        // will be changed to configuration
-        val API_KEY = "3fe1d1cf3d8a9924be09220c78cd6280"
     }
 }

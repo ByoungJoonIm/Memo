@@ -30,6 +30,7 @@ subprojects {
     dependencies {
         implementation(platform("org.springframework.boot:spring-boot-dependencies:2.7.5"))
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.4")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.22")
     }
 
     repositories {

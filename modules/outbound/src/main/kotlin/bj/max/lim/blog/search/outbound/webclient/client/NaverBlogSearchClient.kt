@@ -1,5 +1,6 @@
 package bj.max.lim.blog.search.outbound.webclient.client
 
+import bj.max.lim.blog.search.outbound.webclient.configuration.NaverBlogSearchProperties
 import bj.max.lim.blog.search.outbound.webclient.request.NaverBlogSearchRequest
 import bj.max.lim.blog.search.outbound.webclient.response.NaverBlogSearchResponse
 import org.springframework.stereotype.Component
@@ -9,12 +10,13 @@ import reactor.core.publisher.Mono
 @Component
 class NaverBlogSearchClient(
     webClientBuilder: WebClient.Builder,
+    naverBlogSearchProperties: NaverBlogSearchProperties,
 ) {
     private val webClient = webClientBuilder
         .baseUrl(BASE_URL)
         .defaultHeaders {
-            it.add(CLIENT_ID_HEADER, CLIENT_ID_VALUE)
-            it.add(CLIENT_SECRET_HEADER, CLIENT_SECRET_VALUE)
+            it.add(CLIENT_ID_HEADER, naverBlogSearchProperties.clientId)
+            it.add(CLIENT_SECRET_HEADER, naverBlogSearchProperties.clientSecret)
         }
         .build()
 
@@ -35,9 +37,5 @@ class NaverBlogSearchClient(
 
         val CLIENT_ID_HEADER = "X-Naver-Client-Id"
         val CLIENT_SECRET_HEADER = "X-Naver-Client-Secret"
-
-        // will be changed to configuration
-        val CLIENT_ID_VALUE = "0OneZosq6U7J2lPRbv5q"
-        val CLIENT_SECRET_VALUE = "iRW6lbWFzq"
     }
 }
