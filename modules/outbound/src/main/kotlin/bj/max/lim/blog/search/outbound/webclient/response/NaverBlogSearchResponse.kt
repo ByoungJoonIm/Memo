@@ -1,9 +1,12 @@
 package bj.max.lim.blog.search.outbound.webclient.response
 
 import bj.max.lim.blog.search.common.Rfc1123Deserializer
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
 import java.time.Instant
+import java.time.LocalDate
 
 /**
  * https://developers.naver.com/docs/serviceapi/search/blog/blog.md#%EC%9D%91%EB%8B%B5
@@ -24,10 +27,10 @@ data class NaverBlogSearchResponse(
     val display: Int,
 
     // 검색 결과
-    val items: List<Item>
+    val items: List<NaverBlogItem>
 )
 
-data class Item(
+data class NaverBlogItem(
     // 블로그 포스트의 제목. 제목에서 검색어와 일치하는 부분은 <b> 태그로 감싸져 있습니다.
     val title: String,
 
@@ -47,5 +50,7 @@ data class Item(
 
     // 블로그 포스트가 작성된 날짜
     @JsonProperty("postdate")
-    val postDate: String,
+    @JsonDeserialize(using = LocalDateDeserializer::class)
+    @JsonFormat(pattern = "yyyyMMdd")
+    val postDate: LocalDate,
 )

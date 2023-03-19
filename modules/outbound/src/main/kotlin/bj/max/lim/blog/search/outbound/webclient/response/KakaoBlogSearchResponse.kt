@@ -10,7 +10,7 @@ import java.time.Instant
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class KakaoBlogSearchResponse(
     val meta: Meta,
-    val documents: List<Document>,
+    val documents: List<KaKaoDocument>,
 )
 
 data class Meta(
@@ -27,7 +27,7 @@ data class Meta(
     val isEnd: Boolean,
 )
 
-data class Document(
+data class KaKaoDocument(
     // 블로그 글 제목
     val title: String,
 

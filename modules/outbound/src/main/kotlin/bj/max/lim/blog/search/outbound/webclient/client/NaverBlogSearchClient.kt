@@ -1,6 +1,7 @@
 package bj.max.lim.blog.search.outbound.webclient.client
 
 import bj.max.lim.blog.search.outbound.webclient.configuration.NaverBlogSearchProperties
+import bj.max.lim.blog.search.outbound.webclient.exception.BlogSearchErrorHandler
 import bj.max.lim.blog.search.outbound.webclient.request.NaverBlogSearchRequest
 import bj.max.lim.blog.search.outbound.webclient.response.NaverBlogSearchResponse
 import org.springframework.stereotype.Component
@@ -18,6 +19,7 @@ class NaverBlogSearchClient(
             it.add(CLIENT_ID_HEADER, naverBlogSearchProperties.clientId)
             it.add(CLIENT_SECRET_HEADER, naverBlogSearchProperties.clientSecret)
         }
+        .filter(BlogSearchErrorHandler.errorHandler())
         .build()
 
     suspend fun send(request: NaverBlogSearchRequest): Mono<NaverBlogSearchResponse> {

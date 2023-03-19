@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class BlogSearchApplication
+class BlogSearchTestApplication
 
 fun main(args: Array<String>) {
-    runApplication<BlogSearchApplication>(*args)
+    runApplication<BlogSearchTestApplication>(*args)
 }

@@ -1,6 +1,6 @@
 package bj.max.lim.blog.search.outbound.webclient
 
-import bj.max.lim.blog.search.outbound.BlogSearchApplication
+import bj.max.lim.blog.search.outbound.BlogSearchTestApplication
 import bj.max.lim.blog.search.outbound.database.configuration.JpaEntityConfiguration
 import bj.max.lim.blog.search.outbound.webclient.configuration.ClientConfiguration
 import org.springframework.boot.test.context.SpringBootTest
@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = [BlogSearchApplication::class]
+    classes = [BlogSearchTestApplication::class]
 )
 @ActiveProfiles("test")
 @Import(ClientConfiguration::class, JpaEntityConfiguration::class)

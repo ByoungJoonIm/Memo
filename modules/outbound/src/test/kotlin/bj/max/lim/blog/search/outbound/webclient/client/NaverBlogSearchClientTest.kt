@@ -22,7 +22,12 @@ class NaverBlogSearchClientTest : AbstractSpringTest() {
             naverBlogSearchClient.send(request).block()
         }
 
+        val result2 = runBlocking {
+            naverBlogSearchClient.send(request.copy(start = 2)).block()
+        }
+
         // then
         println(result)
+        println(result2)
     }
 }
