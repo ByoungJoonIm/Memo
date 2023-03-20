@@ -1,7 +1,7 @@
 package bj.max.lim.blog.search.domain.aggregate.impl
 
-import bj.max.lim.blog.search.outbound.webclient.response.KaKaoDocument
 import bj.max.lim.blog.search.outbound.webclient.response.KakaoBlogSearchResponse
+import bj.max.lim.blog.search.outbound.webclient.response.KakaoDocument
 import bj.max.lim.blog.search.outbound.webclient.response.Meta
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class KaKaoBlogSearchImplTest {
                 isEnd = false
             ),
             documents = listOf(
-                KaKaoDocument(
+                KakaoDocument(
                     title = "떡볶이 사랑",
                     contents = "떡볶이는 너무 맛있어요. 치킨이랑 같이 먹어도 너무 맛있답니다.",
                     url = "https://blog.kakao.com/13451515",
@@ -30,7 +30,7 @@ class KaKaoBlogSearchImplTest {
                     thumbnail = "https://blog.kakao.com/thumbnail/13451515",
                     datetime = now,
                 ),
-                KaKaoDocument(
+                KakaoDocument(
                     title = "떡볶이 love",
                     contents = "떡볶이는 너무 맛있어요. 치킨이랑 같이 먹어도 너무 맛있답니다.",
                     url = "https://blog.kakao.com/13451516",

@@ -1,12 +1,12 @@
 package bj.max.lim.blog.search.domain.aggregate.impl
 
 import bj.max.lim.blog.search.domain.aggregate.Blog
-import bj.max.lim.blog.search.outbound.webclient.response.KaKaoDocument
+import bj.max.lim.blog.search.outbound.webclient.response.KakaoDocument
 import java.time.LocalDate
 import java.time.ZoneId
 
 class KakaoBlogImpl(
-    private val kakaoDocument: KaKaoDocument,
+    private val kakaoDocument: KakaoDocument,
 ) : Blog {
     override val title: String
         get() = kakaoDocument.title

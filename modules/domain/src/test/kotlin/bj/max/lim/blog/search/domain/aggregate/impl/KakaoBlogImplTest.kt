@@ -1,6 +1,6 @@
 package bj.max.lim.blog.search.domain.aggregate.impl
 
-import bj.max.lim.blog.search.outbound.webclient.response.KaKaoDocument
+import bj.max.lim.blog.search.outbound.webclient.response.KakaoDocument
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -14,7 +14,7 @@ class KakaoBlogImplTest {
         // given
         val now = LocalDateTime.parse("2023-03-19T18:00:00").atZone(ZoneId.of("Asia/Seoul")).toInstant()
 
-        val kakaoDocument = KaKaoDocument(
+        val kakaoDocument = KakaoDocument(
             title = "떡볶이 사랑",
             contents = "떡볶이는 너무 맛있어요. 치킨이랑 같이 먹어도 너무 맛있답니다.",
             url = "https://blog.kakao.com/13451515",
