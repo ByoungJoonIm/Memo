@@ -18,7 +18,8 @@ fun List<KeywordRank>.mapToKeywordRankResponse(): KeywordRankResponse {
     return KeywordRankResponse(
         keywordRankList = this.map {
             KeywordRankResponse.KeywordRank(
-                it.keyword, it.count
+                keyword = it.keyword,
+                count = it.count,
             )
         }
     )

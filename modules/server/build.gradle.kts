@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(project(":domain"))
 
 //    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -21,4 +22,5 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 }

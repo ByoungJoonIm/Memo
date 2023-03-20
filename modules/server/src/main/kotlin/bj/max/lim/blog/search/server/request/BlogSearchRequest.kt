@@ -1,5 +1,6 @@
 package bj.max.lim.blog.search.server.request
 
+import bj.max.lim.blog.search.common.exception.FieldOutOfRangeException
 import bj.max.lim.blog.search.domain.service.iface.BlogSearchContext
 import com.google.common.annotations.VisibleForTesting
 
@@ -17,11 +18,11 @@ data class BlogSearchRequest(
     val blogSearchSortingOption: BlogSearchSortingOption = BlogSearchSortingOption.ACCURACY_FIRST,
 ) {
     init {
-        assert(page in 1..MAX_PAGE) {
-            PAGE_OUT_OF_RANGE_MESSAGE
+        if (page < 1 || page > MAX_PAGE) {
+            throw FieldOutOfRangeException(PAGE_OUT_OF_RANGE_MESSAGE)
         }
-        assert(pageSize in 1..MAX_PAGE_SIZE) {
-            PAGE_SIZE_OUT_OF_RANGE_MESSAGE
+        if (pageSize < 1 || pageSize > MAX_PAGE_SIZE) {
+            throw FieldOutOfRangeException(PAGE_SIZE_OUT_OF_RANGE_MESSAGE)
         }
     }
 
