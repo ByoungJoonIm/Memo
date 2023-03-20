@@ -2,6 +2,7 @@ package bj.max.lim.blog.search.domain.service.iface
 
 import bj.max.lim.blog.search.outbound.webclient.request.KakaoBlogSearchRequest
 import bj.max.lim.blog.search.outbound.webclient.request.NaverBlogSearchRequest
+import com.google.common.annotations.VisibleForTesting
 
 /**
  * kakao보다 naver가 조회 범위가 적습니다.
@@ -22,9 +23,27 @@ data class BlogSearchContext(
     // sorting 방식(정확도우선 / 최신 데이터 우선) default ACCURACY_FIRST
     val blogSearchSortingOption: BlogSearchSortingOption = BlogSearchSortingOption.ACCURACY_FIRST,
 ) {
+
+    init {
+        assert(page in 1..MAX_PAGE) {
+            PAGE_OUT_OF_RANGE_MESSAGE
+        }
+        assert(pageSize in 1..MAX_PAGE_SIZE) {
+            PAGE_SIZE_OUT_OF_RANGE_MESSAGE
+        }
+    }
+
     enum class BlogSearchSortingOption {
         ACCURACY_FIRST,
         RECENCY_FIRST,
+    }
+
+    @VisibleForTesting
+    companion object {
+        internal val MAX_PAGE = 50
+        internal val MAX_PAGE_SIZE = 20
+        val PAGE_OUT_OF_RANGE_MESSAGE = "page 1 ~ $MAX_PAGE 범위여야 합니다."
+        val PAGE_SIZE_OUT_OF_RANGE_MESSAGE = "size는 1 ~ $MAX_PAGE_SIZE 범위여야 합니다."
     }
 }
 

@@ -4,5 +4,5 @@ import bj.max.lim.blog.search.domain.aggregate.BlogSearch
 import bj.max.lim.blog.search.domain.service.iface.BlogSearchContext
 
 interface BlogSearchRepository {
-    fun findByBlogSearchContext(blogSearchContext: BlogSearchContext): BlogSearch
+    suspend fun findByBlogSearchContext(blogSearchContext: BlogSearchContext): BlogSearch
 }
