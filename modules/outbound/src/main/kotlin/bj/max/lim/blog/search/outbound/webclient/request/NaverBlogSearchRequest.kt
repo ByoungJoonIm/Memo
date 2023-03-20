@@ -1,5 +1,6 @@
 package bj.max.lim.blog.search.outbound.webclient.request
 
+import com.google.common.annotations.VisibleForTesting
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
@@ -27,10 +28,10 @@ data class NaverBlogSearchRequest(
     }
 
     init {
-        assert(display in 1..100) {
+        assert(display in 1..MAX_DISPLAY) {
             DISPLAY_OUT_OF_RANGE_MESSAGE
         }
-        assert(start in 1..1000) {
+        assert(start in 1..MAX_START) {
             START_OUT_OF_RANGE_MESSAGE
         }
     }
@@ -44,8 +45,11 @@ data class NaverBlogSearchRequest(
         return queryMap
     }
 
+    @VisibleForTesting
     companion object {
-        val DISPLAY_OUT_OF_RANGE_MESSAGE = "display는 1 ~ 100 범위여야 합니다."
-        val START_OUT_OF_RANGE_MESSAGE = "start는 1 ~ 1000 범위여야 합니다."
+        val MAX_DISPLAY = 100
+        val MAX_START = 1000
+        val DISPLAY_OUT_OF_RANGE_MESSAGE = "display는 1 ~ $MAX_DISPLAY 범위여야 합니다."
+        val START_OUT_OF_RANGE_MESSAGE = "start는 1 ~ $MAX_START 범위여야 합니다."
     }
 }

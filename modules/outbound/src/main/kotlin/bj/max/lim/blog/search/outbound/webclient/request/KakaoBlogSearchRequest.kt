@@ -1,5 +1,6 @@
 package bj.max.lim.blog.search.outbound.webclient.request
 
+import com.google.common.annotations.VisibleForTesting
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
@@ -14,10 +15,10 @@ data class KakaoBlogSearchRequest(
     // 결과 문서 정렬 방식, accuracy(정확도순) 또는 recency(최신순), 기본 값 accuracy
     val sort: SortingOption = SortingOption.ACCURACY_FIRST,
 
-    // 결과 페이지 번호, 1~50 사이의 값, 기본 값 1
+    // 결과 페이지 번호, 1~MAX_PAGE 사이의 값, 기본 값 1
     val page: Int = 1,
 
-    // 한 페이지에 보여질 문서 수, 1~50 사이의 값, 기본 값 10
+    // 한 페이지에 보여질 문서 수, 1~MAX_SIZE 사이의 값, 기본 값 10
     val size: Int = 10,
 ) {
     enum class SortingOption(val alias: String) {
@@ -26,10 +27,10 @@ data class KakaoBlogSearchRequest(
     }
 
     init {
-        assert(page in 1..50) {
+        assert(page in 1..MAX_PAGE) {
             PAGE_OUT_OF_RANGE_MESSAGE
         }
-        assert(size in 1..50) {
+        assert(size in 1..MAX_SIZE) {
             SIZE_OUT_OF_RANGE_MESSAGE
         }
     }
@@ -43,8 +44,11 @@ data class KakaoBlogSearchRequest(
         return queryMap
     }
 
+    @VisibleForTesting
     companion object {
-        val PAGE_OUT_OF_RANGE_MESSAGE = "page 1 ~ 50 범위여야 합니다."
-        val SIZE_OUT_OF_RANGE_MESSAGE = "size는 1 ~ 50 범위여야 합니다."
+        val MAX_PAGE = 50
+        val MAX_SIZE = 50
+        val PAGE_OUT_OF_RANGE_MESSAGE = "page 1 ~ $MAX_PAGE 범위여야 합니다."
+        val SIZE_OUT_OF_RANGE_MESSAGE = "size는 1 ~ $MAX_SIZE 범위여야 합니다."
     }
 }
