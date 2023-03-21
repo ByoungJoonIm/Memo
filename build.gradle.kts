@@ -14,6 +14,8 @@ allprojects {
     version = "0.0.1-SNAPSHOT"
 }
 
+tasks.bootJar.get().enabled = false
+
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -55,4 +57,6 @@ subprojects {
     tasks.withType<Test> {
         useJUnitPlatform()
     }
+
+    tasks.bootJar.get().enabled = false
 }

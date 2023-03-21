@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Import
 @ComponentScan(
     basePackages = [
         "bj.max.lim.blog.search.domain.repository",
-        "bj.max.lim.blog.search.domain.repository.impl",
         "bj.max.lim.blog.search.domain.service",
     ]
 )
