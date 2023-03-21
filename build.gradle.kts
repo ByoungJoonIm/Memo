@@ -14,8 +14,6 @@ allprojects {
     version = "0.0.1-SNAPSHOT"
 }
 
-tasks.bootJar.get().enabled = false
-
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -59,4 +57,7 @@ subprojects {
     }
 
     tasks.bootJar.get().enabled = false
+    tasks.jar.get().enabled = true
 }
+
+tasks.bootJar.get().enabled = false

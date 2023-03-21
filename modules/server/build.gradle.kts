@@ -24,3 +24,9 @@ dependencies {
     testImplementation(libs.reactor.test)
     testImplementation(libs.mockito.kotlin)
 }
+
+tasks.bootJar {
+    enabled = true
+    mainClass.set("bj.max.lim.blog.search.server.BlogSearchApplicationKt")
+}
+tasks.jar.get().enabled = false
