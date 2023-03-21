@@ -24,7 +24,7 @@ data class BlogSearchResponse(
         // 블로그 글 요약
         val description: String,
 
-        // 블로그 글 작성 시간
+        // 블로그 글 작성 날짜
         @DateTimeFormat
         val postDate: LocalDate,
     )
