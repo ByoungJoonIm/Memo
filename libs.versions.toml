@@ -7,7 +7,7 @@ ktlint = "10.2.1"
 guava = "13.0"
 junit = "5.9.1"
 mockito = "4.1.0"
-jackson-annotations = "2.14.2"
+jackson = "2.14.2"
 h2 = "2.1.214"
 
 [libraries]
@@ -24,7 +24,8 @@ reactor-test = { module = "io.projectreactor:reactor-test" }
 
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito" }
-jackson-annotations = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
