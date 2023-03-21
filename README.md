@@ -1,5 +1,9 @@
 # Blog Search
 
+## Download jar
+- [https://drive.google.com/drive/folders/1n_92LnQ4_PSb3778jeNTKoiTNDKPQkkV](https://drive.google.com/drive/folders/1n_92LnQ4_PSb3778jeNTKoiTNDKPQkkV)
+  - 다운로드를 누르면 반응이 없다가, 약 10초 후에 `바이러스 검사가 불가능` 메세지가 출력되고, 다운로드가 가능합니다.
+
 ## Spec
 ### BlogSearch
 - `http://localhost:8080/BlogSearch`
