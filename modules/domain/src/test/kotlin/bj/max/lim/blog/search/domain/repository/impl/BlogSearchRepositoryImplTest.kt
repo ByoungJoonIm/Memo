@@ -186,7 +186,7 @@ class BlogSearchRepositoryImplTest {
         } willThrow { Client5XXException("네이버 블로그 장애") }
 
         // when
-        val result = runBlocking {
+        runBlocking {
             assertThrows<AllClientUnavailableException> {
                 blogSearchRepository.findByBlogSearchContext(blogSearchContext)
             }

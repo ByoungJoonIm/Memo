@@ -88,7 +88,7 @@ class KeywordRankEntityRepositoryTest : AbstractSpringTest() {
 
         // then
         assertThat(result!!.keyword).isEqualTo("keyword")
-        assertThat(result!!.count).isEqualTo(10L)
+        assertThat(result.count).isEqualTo(10L)
     }
 
     @Test
