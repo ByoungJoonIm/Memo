@@ -33,7 +33,8 @@ data class BlogSearchRequest(
 
         companion object {
             fun fromAlias(alias: String): BlogSearchSortingOption {
-                return BlogSearchSortingOption.values().first { it.alias == alias }
+                return values().firstOrNull { it.alias == alias }
+                    ?: throw FieldOutOfRangeException(SORTING_STRING_INVALID_MESSAGE)
             }
         }
     }
@@ -44,6 +45,7 @@ data class BlogSearchRequest(
         internal val MAX_PAGE_SIZE = 20
         val PAGE_OUT_OF_RANGE_MESSAGE = "page 1 ~ $MAX_PAGE 범위여야 합니다."
         val PAGE_SIZE_OUT_OF_RANGE_MESSAGE = "size는 1 ~ $MAX_PAGE_SIZE 범위여야 합니다."
+        val SORTING_STRING_INVALID_MESSAGE = "sorting은 [${BlogSearchSortingOption.values().map { it.alias }.joinToString(", ")}]만 지원됩니다."
     }
 }
 
