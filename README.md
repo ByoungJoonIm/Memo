@@ -1,7 +1,9 @@
 # Blog Search
 
 ## Download jar
-- [https://drive.google.com/drive/folders/1n_92LnQ4_PSb3778jeNTKoiTNDKPQkkV](https://drive.google.com/drive/folders/1n_92LnQ4_PSb3778jeNTKoiTNDKPQkkV)
+- [github download link](https://github.com/ByoungJoonIm/Memo/raw/feature/blog-search/jar/server-0.0.1-SNAPSHOT.jar)
+  - 깃헙에서 다운이 안되는 경우 아래 링크를 이용 부탁드립니다.
+- [google drive download link](https://drive.google.com/drive/folders/1n_92LnQ4_PSb3778jeNTKoiTNDKPQkkV)
   - 다운로드를 누르면 반응이 없다가, 약 10초 후에 `바이러스 검사가 불가능` 메세지가 출력되고, 다운로드가 가능합니다.
 
 ## Spec
