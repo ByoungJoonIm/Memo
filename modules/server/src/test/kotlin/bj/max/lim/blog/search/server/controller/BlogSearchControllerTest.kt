@@ -2,11 +2,13 @@ package bj.max.lim.blog.search.server.controller
 
 import bj.max.lim.blog.search.domain.aggregate.Blog
 import bj.max.lim.blog.search.domain.aggregate.BlogSearch
+import bj.max.lim.blog.search.domain.aggregate.KeywordRank
 import bj.max.lim.blog.search.domain.service.BlogSearchService
 import bj.max.lim.blog.search.domain.service.KeywordRankService
 import bj.max.lim.blog.search.domain.service.iface.BlogSearchContext
 import bj.max.lim.blog.search.server.request.BlogSearchRequest
 import bj.max.lim.blog.search.server.response.BlogSearchResponse
+import bj.max.lim.blog.search.server.response.KeywordRankResponse
 import bj.max.lim.blog.search.server.response.mapToBlogSearchResponse
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -217,9 +219,43 @@ class BlogSearchControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isBadRequest
+            .expectBody(String::class.java).isEqualTo(BlogSearchContext.PAGE_OUT_OF_RANGE_MESSAGE)
     }
 
     @Test
     fun keywordRank() {
+        // given
+        val keywordRankList = listOf(
+            object : KeywordRank {
+                override val keyword: String
+                    get() = "떡볶이"
+                override val count: Long
+                    get() = 10
+            },
+            object : KeywordRank {
+                override val keyword: String
+                    get() = "치킨"
+                override val count: Long
+                    get() = 4
+            },
+        )
+
+        given { runBlocking { keywordSearchService.findTop10Keywords() } } willReturn { keywordRankList }
+
+        // when
+        // then
+        webTestClient
+            .get()
+            .uri { urlBuilder ->
+                urlBuilder.path("/KeywordRank")
+                    .build()
+            }
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(KeywordRankResponse::class.java).value { keywordRankResponse ->
+                assertThat(keywordRankResponse.keywordRankList.map { it.keyword }).containsExactlyElementsOf(keywordRankList.map { it.keyword })
+                assertThat(keywordRankResponse.keywordRankList.map { it.count }).containsExactlyElementsOf(keywordRankList.map { it.count })
+            }
     }
 }

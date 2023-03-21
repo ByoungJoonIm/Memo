@@ -1,5 +1,6 @@
 dependencies {
     implementation(project(":outbound"))
+    implementation(project(":common"))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.guava)
 

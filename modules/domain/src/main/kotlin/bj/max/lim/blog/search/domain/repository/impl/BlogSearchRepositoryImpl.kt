@@ -1,28 +1,34 @@
 package bj.max.lim.blog.search.domain.repository.impl
 
+import bj.max.lim.blog.search.common.exception.AllClientUnavailableException
+import bj.max.lim.blog.search.common.exception.Client5XXException
 import bj.max.lim.blog.search.domain.aggregate.BlogSearch
-import bj.max.lim.blog.search.domain.aggregate.impl.KakaoBlogSearchImpl
+import bj.max.lim.blog.search.domain.repository.BlogSearchClientRepository
 import bj.max.lim.blog.search.domain.repository.BlogSearchRepository
 import bj.max.lim.blog.search.domain.service.iface.BlogSearchContext
-import bj.max.lim.blog.search.domain.service.iface.mapToKakaoBlogSearchRequest
-import bj.max.lim.blog.search.outbound.webclient.client.KakaoBlogSearchClient
-import bj.max.lim.blog.search.outbound.webclient.client.NaverBlogSearchClient
-import kotlinx.coroutines.reactor.awaitSingle
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 
 @Repository
 class BlogSearchRepositoryImpl(
-    private val kakaoBlogSearchClient: KakaoBlogSearchClient,
-    private val naverBlogSearchClient: NaverBlogSearchClient,
+    private val blogSearchClientRepositoryList: List<BlogSearchClientRepository>,
 ) : BlogSearchRepository {
 
-    /**
-     * TODO: kakao 장애시 naver 요청으로 처리될 수 있도록 수정
-     * TODO: test 작성
-     * */
+    private val logger = LoggerFactory.getLogger(BlogSearchRepositoryImpl::class.java)
+
     override suspend fun findByBlogSearchContext(blogSearchContext: BlogSearchContext): BlogSearch {
-        val kakaoBlogSEarchResponse = kakaoBlogSearchClient.send(blogSearchContext.mapToKakaoBlogSearchRequest())
-            .awaitSingle()
-        return KakaoBlogSearchImpl(kakaoBlogSEarchResponse)
+        blogSearchClientRepositoryList.map {
+            try {
+                return it.findByBlogSearchContext(blogSearchContext)
+            } catch (e: Client5XXException) {
+                // 5XX 예외는 외부 서버가 잘못된 경우이므로 info로 남긴다.
+                logger.info(e.stackTraceToString())
+            } catch (e: Exception) {
+                // 4xx 예외 및 다른 예외 발생은 spec이 잘못되었을 수 있으니 warn으로 남긴다.
+                logger.warn(e.stackTraceToString())
+            }
+        }
+
+        throw AllClientUnavailableException()
     }
 }
