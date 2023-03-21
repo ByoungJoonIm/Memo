@@ -1,18 +1,19 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("plugin.jpa") version "1.7.22"
-    kotlin("plugin.spring") version "1.7.22"
+    alias(libs.plugins.kotlin.jpa)
+    alias(libs.plugins.kotlin.spring)
 }
 
 dependencies {
     implementation(project(":common"))
 
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.14.2")
-    api("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.google.guava:guava:13.0")
+    implementation(libs.jackson.annotations)
+    api(libs.spring.boot.starter.data.jpa)
+    api(libs.spring.boot.starter.webflux)
+    api(libs.spring.boot.starter.web)
+    implementation(libs.guava)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("com.h2database:h2:2.1.214")
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.h2)
 }

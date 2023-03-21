@@ -1,11 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("org.springframework.boot") version "3.0.4"
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.spring") version "1.7.22"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.spring.dependency.management)
 }
 
 allprojects {
@@ -20,6 +21,7 @@ repositories {
 }
 
 subprojects {
+    val libs = rootProject.libs
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "org.springframework.boot")
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -27,9 +29,9 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
 
     dependencies {
-        implementation(platform("org.springframework.boot:spring-boot-dependencies:2.7.5"))
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.4")
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.22")
+        implementation(platform(libs.spring.boot.dependencies))
+        implementation(libs.kotlinx.coroutines.reactor)
+        implementation(libs.kotlin.reflect)
     }
 
     repositories {

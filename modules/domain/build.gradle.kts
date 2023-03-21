@@ -1,12 +1,9 @@
-plugins {
-}
-
 dependencies {
     implementation(project(":outbound"))
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.google.guava:guava:13.0")
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.guava)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.mockito.kotlin)
 }
