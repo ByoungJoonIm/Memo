@@ -7,7 +7,7 @@ import org.springframework.util.MultiValueMap
 /**
  * https://developers.naver.com/docs/serviceapi/search/blog/blog.md#%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0
  * */
-data class NaverBlogSearchRequest(
+data class NaverBlogSearchClientRequest(
     // 검색어. UTF-8로 인코딩되어야 합니다.
     val query: String,
 

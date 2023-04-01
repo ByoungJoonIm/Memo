@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration
 @ComponentScan(
     basePackages = [
         "bj.max.lim.blog.search.outbound.webclient.client",
+        "bj.max.lim.blog.search.outbound.webclient.port",
     ]
 )
 class ClientConfiguration

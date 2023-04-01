@@ -2,15 +2,16 @@ package bj.max.lim.blog.search.domain.repository.impl
 
 import bj.max.lim.blog.search.common.exception.AllClientUnavailableException
 import bj.max.lim.blog.search.common.exception.Client5XXException
-import bj.max.lim.blog.search.domain.aggregate.impl.KakaoBlogSearchImpl
-import bj.max.lim.blog.search.domain.aggregate.impl.NaverBlogSearchImpl
 import bj.max.lim.blog.search.domain.repository.BlogSearchRepository
 import bj.max.lim.blog.search.domain.service.iface.BlogSearchContext
-import bj.max.lim.blog.search.outbound.webclient.response.KakaoBlogSearchResponse
+import bj.max.lim.blog.search.outbound.webclient.client.KakaoBlogSearchClient
+import bj.max.lim.blog.search.outbound.webclient.client.NaverBlogSearchClient
+import bj.max.lim.blog.search.outbound.webclient.request.BlogSearchClientRequest
+import bj.max.lim.blog.search.outbound.webclient.response.KakaoBlogSearchClientResponse
 import bj.max.lim.blog.search.outbound.webclient.response.KakaoDocument
 import bj.max.lim.blog.search.outbound.webclient.response.Meta
 import bj.max.lim.blog.search.outbound.webclient.response.NaverBlogItem
-import bj.max.lim.blog.search.outbound.webclient.response.NaverBlogSearchResponse
+import bj.max.lim.blog.search.outbound.webclient.response.NaverBlogSearchClientResponse
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -29,18 +30,19 @@ import java.time.ZoneId
 
 class BlogSearchRepositoryImplTest {
 
-    lateinit var kakaoBlogSearchClientRepositoryImpl: KakaoBlogSearchClientRepositoryImpl
-    lateinit var naverBlogSearchClientRepositoryImpl: NaverBlogSearchClientRepositoryImpl
+    lateinit var kakaoBlogSearchClient: KakaoBlogSearchClient
+    lateinit var naverBlogSearchClient: NaverBlogSearchClient
+
     lateinit var blogSearchRepository: BlogSearchRepository
 
     @BeforeEach
     fun setUp() {
-        kakaoBlogSearchClientRepositoryImpl = mock()
-        naverBlogSearchClientRepositoryImpl = mock()
+        kakaoBlogSearchClient = mock()
+        naverBlogSearchClient = mock()
         blogSearchRepository = BlogSearchRepositoryImpl(
             listOf(
-                kakaoBlogSearchClientRepositoryImpl,
-                naverBlogSearchClientRepositoryImpl,
+                kakaoBlogSearchClient,
+                naverBlogSearchClient,
             )
         )
     }
@@ -55,7 +57,7 @@ class BlogSearchRepositoryImplTest {
             page = 1,
             pageSize = 2,
         )
-        val kakaoBlogSearchResponse = KakaoBlogSearchResponse(
+        val kakaoBlogSearchResponse = KakaoBlogSearchClientResponse(
             meta = Meta(
                 totalCount = 1000,
                 pageableCount = 10,
@@ -64,7 +66,7 @@ class BlogSearchRepositoryImplTest {
             documents = listOf(
                 KakaoDocument(
                     title = "오늘도 떡볶이 한그릇",
-                    contents = "오늘 하루는 가볍게 떡볶이 한그릇으로 마무리 해보세요~ 누가먹어도 맛있는 레시피를 알려드립니다~!",
+                    description = "오늘 하루는 가볍게 떡볶이 한그릇으로 마무리 해보세요~ 누가먹어도 맛있는 레시피를 알려드립니다~!",
                     url = "https://blog.kakao.com/1534132",
                     blogName = "매일떡볶이",
                     thumbnail = "https://blog.kakao.com/thumbnail/1534132",
@@ -72,7 +74,7 @@ class BlogSearchRepositoryImplTest {
                 ),
                 KakaoDocument(
                     title = "오늘도 치킨 한그릇",
-                    contents = "오늘 하루는 가볍게 치킨 한그릇으로 마무리 해보세요~ 누가먹어도 맛있는 레시피를 알려드립니다~!",
+                    description = "오늘 하루는 가볍게 치킨 한그릇으로 마무리 해보세요~ 누가먹어도 맛있는 레시피를 알려드립니다~!",
                     url = "https://blog.kakao.com/15341323",
                     blogName = "매일치킨",
                     thumbnail = "https://blog.kakao.com/thumbnail/15341323",
@@ -80,15 +82,10 @@ class BlogSearchRepositoryImplTest {
                 )
             )
         )
-        val blogSearch = KakaoBlogSearchImpl(
-            kakaoBlogSearchResponse
-        )
 
-        given {
-            runBlocking {
-                kakaoBlogSearchClientRepositoryImpl.findByBlogSearchContext(any<BlogSearchContext>())
-            }
-        } willReturn { blogSearch }
+        runBlocking {
+            given(kakaoBlogSearchClient.send(any<BlogSearchClientRequest>())) willReturn { kakaoBlogSearchResponse }
+        }
 
         // when
         val result = runBlocking {
@@ -98,8 +95,8 @@ class BlogSearchRepositoryImplTest {
         // then
         assertThat(result.blogList).hasSize(2)
         runBlocking {
-            verify(kakaoBlogSearchClientRepositoryImpl, times(1)).findByBlogSearchContext(any())
-            verify(naverBlogSearchClientRepositoryImpl, times(0)).findByBlogSearchContext(any())
+            verify(kakaoBlogSearchClient, times(1)).send(any())
+            verify(naverBlogSearchClient, times(0)).send(any())
         }
     }
 
@@ -113,7 +110,7 @@ class BlogSearchRepositoryImplTest {
             page = 1,
             pageSize = 2,
         )
-        val naverBlogSearchResponse = NaverBlogSearchResponse(
+        val naverBlogSearchResponse = NaverBlogSearchClientResponse(
             lastBuildDate = now,
             total = 12414,
             start = 1,
@@ -121,36 +118,33 @@ class BlogSearchRepositoryImplTest {
             items = listOf(
                 NaverBlogItem(
                     title = "떡볶이",
-                    link = "https://blog.naver.com/abc/1241341",
+                    url = "https://blog.naver.com/abc/1241341",
                     description = "떡볶이가 없는 세상을 상상해본 적이 있나요? 교촌치킨과 함께 드셔보셨나요?",
-                    bloggerName = "떡볶이 마당",
+                    blogName = "떡볶이 마당",
                     bloggerLink = "https://blog.naver.com/abc",
                     postDate = LocalDate.parse("2023-03-16")
                 ),
                 NaverBlogItem(
                     title = "떡볶이2",
-                    link = "https://blog.naver.com/abc/1241342",
+                    url = "https://blog.naver.com/abc/1241342",
                     description = "떡볶이가 좋아!!",
-                    bloggerName = "떡볶이 뒷마당",
+                    blogName = "떡볶이 뒷마당",
                     bloggerLink = "https://blog.naver.com/abd",
                     postDate = LocalDate.parse("2023-03-19")
                 )
             )
         )
-        val blogSearch = NaverBlogSearchImpl(
-            naverBlogSearchResponse
-        )
 
         given {
             runBlocking {
-                kakaoBlogSearchClientRepositoryImpl.findByBlogSearchContext(any<BlogSearchContext>())
+                kakaoBlogSearchClient.send(any<BlogSearchClientRequest>())
             }
         } willThrow { Client5XXException("카카오 블로그 장애") }
         given {
             runBlocking {
-                naverBlogSearchClientRepositoryImpl.findByBlogSearchContext(any<BlogSearchContext>())
+                naverBlogSearchClient.send(any<BlogSearchClientRequest>())
             }
-        } willReturn { blogSearch }
+        } willReturn { naverBlogSearchResponse }
 
         // when
         val result = runBlocking {
@@ -160,8 +154,8 @@ class BlogSearchRepositoryImplTest {
         // then
         assertThat(result.blogList).hasSize(2)
         runBlocking {
-            verify(kakaoBlogSearchClientRepositoryImpl, times(1)).findByBlogSearchContext(any())
-            verify(naverBlogSearchClientRepositoryImpl, times(1)).findByBlogSearchContext(any())
+            verify(kakaoBlogSearchClient, times(1)).send(any())
+            verify(naverBlogSearchClient, times(1)).send(any())
         }
     }
 
@@ -176,12 +170,12 @@ class BlogSearchRepositoryImplTest {
 
         given {
             runBlocking {
-                kakaoBlogSearchClientRepositoryImpl.findByBlogSearchContext(any<BlogSearchContext>())
+                kakaoBlogSearchClient.send(any<BlogSearchClientRequest>())
             }
         } willThrow { Client5XXException("카카오 블로그 장애") }
         given {
             runBlocking {
-                naverBlogSearchClientRepositoryImpl.findByBlogSearchContext(any<BlogSearchContext>())
+                naverBlogSearchClient.send(any<BlogSearchClientRequest>())
             }
         } willThrow { Client5XXException("네이버 블로그 장애") }
 
@@ -194,8 +188,8 @@ class BlogSearchRepositoryImplTest {
 
         // then
         runBlocking {
-            verify(kakaoBlogSearchClientRepositoryImpl, times(1)).findByBlogSearchContext(any())
-            verify(naverBlogSearchClientRepositoryImpl, times(1)).findByBlogSearchContext(any())
+            verify(kakaoBlogSearchClient, times(1)).send(any())
+            verify(naverBlogSearchClient, times(1)).send(any())
         }
     }
 }

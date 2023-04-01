@@ -1,7 +1,5 @@
 package bj.max.lim.blog.search.domain.service.iface
 
-import bj.max.lim.blog.search.outbound.webclient.request.KakaoBlogSearchRequest
-import bj.max.lim.blog.search.outbound.webclient.request.NaverBlogSearchRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -56,7 +54,7 @@ class BlogSearchContextTest {
     }
 
     @Test
-    fun `mapToKakaoBlogSearchRequest`() {
+    fun `mapToBlogSearchClientRequest`() {
         // given
         val blogSearchContext = BlogSearchContext(
             query = "떡볶이",
@@ -66,32 +64,12 @@ class BlogSearchContextTest {
         )
 
         // when
-        val result = blogSearchContext.mapToKakaoBlogSearchRequest()
+        val result = blogSearchContext.mapToBlogSearchClientRequest()
 
         // then
         assertThat(result.query).isEqualTo(blogSearchContext.query)
         assertThat(result.page).isEqualTo(blogSearchContext.page)
-        assertThat(result.size).isEqualTo(blogSearchContext.pageSize)
-        assertThat(result.sort).isEqualTo(KakaoBlogSearchRequest.SortingOption.RECENCY_FIRST)
-    }
-
-    @Test
-    fun `mapToNaverBlogSearchRequest`() {
-        // given
-        val blogSearchContext = BlogSearchContext(
-            query = "떡볶이",
-            page = 3,
-            pageSize = 15,
-            blogSearchSortingOption = BlogSearchContext.BlogSearchSortingOption.RECENCY_FIRST,
-        )
-
-        // when
-        val result = blogSearchContext.mapToNaverBlogSearchRequest()
-
-        // then
-        assertThat(result.query).isEqualTo(blogSearchContext.query)
-        assertThat(result.display).isEqualTo(blogSearchContext.pageSize)
-        assertThat(result.start).isEqualTo(31)
-        assertThat(result.sort).isEqualTo(NaverBlogSearchRequest.SortingOption.RECENCY_FIRST)
+        assertThat(result.pageSize).isEqualTo(blogSearchContext.pageSize)
+        assertThat(result.blogSearchSortingOption.name).isEqualTo(blogSearchContext.blogSearchSortingOption.name)
     }
 }

@@ -13,9 +13,9 @@ class KakaoBlogSearchRequestTest {
         // then
         assertDoesNotThrow {
             // when
-            KakaoBlogSearchRequest(
+            KakaoBlogSearchClientRequest(
                 query = "떡볶이",
-                sort = KakaoBlogSearchRequest.SortingOption.ACCURACY_FIRST,
+                sort = KakaoBlogSearchClientRequest.SortingOption.ACCURACY_FIRST,
                 page = 10,
                 size = 50,
             )
@@ -26,31 +26,31 @@ class KakaoBlogSearchRequestTest {
     fun `KakaoBlogSearchRequest에서 page range를 초과한 경우 예외가 발생`() {
         // when
         val result = assertThrows<AssertionError> {
-            KakaoBlogSearchRequest(
+            KakaoBlogSearchClientRequest(
                 query = "떡볶이",
-                sort = KakaoBlogSearchRequest.SortingOption.ACCURACY_FIRST,
+                sort = KakaoBlogSearchClientRequest.SortingOption.ACCURACY_FIRST,
                 page = 0,
                 size = 50,
             )
         }
 
         // then
-        Assertions.assertThat(result.message).isEqualTo(KakaoBlogSearchRequest.PAGE_OUT_OF_RANGE_MESSAGE)
+        Assertions.assertThat(result.message).isEqualTo(KakaoBlogSearchClientRequest.PAGE_OUT_OF_RANGE_MESSAGE)
     }
 
     @Test
     fun `KakaoBlogSearchRequest에서 start range가 초과한 경우 예외가 발생`() {
         // when
         val result = assertThrows<AssertionError> {
-            KakaoBlogSearchRequest(
+            KakaoBlogSearchClientRequest(
                 query = "떡볶이",
-                sort = KakaoBlogSearchRequest.SortingOption.ACCURACY_FIRST,
+                sort = KakaoBlogSearchClientRequest.SortingOption.ACCURACY_FIRST,
                 page = 10,
                 size = 55,
             )
         }
 
         // then
-        Assertions.assertThat(result.message).isEqualTo(KakaoBlogSearchRequest.SIZE_OUT_OF_RANGE_MESSAGE)
+        Assertions.assertThat(result.message).isEqualTo(KakaoBlogSearchClientRequest.SIZE_OUT_OF_RANGE_MESSAGE)
     }
 }

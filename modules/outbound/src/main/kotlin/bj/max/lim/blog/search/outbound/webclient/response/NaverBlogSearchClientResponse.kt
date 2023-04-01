@@ -11,14 +11,14 @@ import java.time.LocalDate
 /**
  * https://developers.naver.com/docs/serviceapi/search/blog/blog.md#%EC%9D%91%EB%8B%B5
  * */
-data class NaverBlogSearchResponse(
+data class NaverBlogSearchClientResponse(
     // 검색 결과를 생성한 시간
     // Sat, 18 Mar 2023 20:02:50 +0900
     @JsonDeserialize(using = Rfc1123Deserializer::class)
     val lastBuildDate: Instant,
 
     // 총 검색 결과 개수
-    val total: Int,
+    override val total: Int,
 
     // 	검색 시작 위치
     val start: Int,
@@ -28,21 +28,25 @@ data class NaverBlogSearchResponse(
 
     // 검색 결과
     val items: List<NaverBlogItem>
-)
+) : BlogSearchClientResponse {
+    override val blogList: List<BlogClientResponse>
+        get() = items
+}
 
 data class NaverBlogItem(
     // 블로그 포스트의 제목. 제목에서 검색어와 일치하는 부분은 <b> 태그로 감싸져 있습니다.
-    val title: String,
+    override val title: String,
 
     // 블로그 포스트의 URL
-    val link: String,
+    @JsonProperty("link")
+    override val url: String,
 
     // 블로그 포스트의 내용을 요약한 패시지 정보. 패시지 정보에서 검색어와 일치하는 부분은 <b> 태그로 감싸져 있습니다.
-    val description: String,
+    override val description: String,
 
     // 블로그 포스트가 있는 블로그의 이름
     @JsonProperty("bloggername")
-    val bloggerName: String,
+    override val blogName: String,
 
     // 블로그 포스트가 있는 블로그의 주소
     @JsonProperty("bloggerlink")
@@ -52,5 +56,5 @@ data class NaverBlogItem(
     @JsonProperty("postdate")
     @JsonDeserialize(using = LocalDateDeserializer::class)
     @JsonFormat(pattern = "yyyyMMdd")
-    val postDate: LocalDate,
-)
+    override val postDate: LocalDate,
+) : BlogClientResponse

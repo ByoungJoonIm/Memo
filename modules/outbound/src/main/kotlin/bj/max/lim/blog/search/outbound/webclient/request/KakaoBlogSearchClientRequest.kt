@@ -7,7 +7,7 @@ import org.springframework.util.MultiValueMap
 /**
  * https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide#search-blog-request
  * */
-data class KakaoBlogSearchRequest(
+data class KakaoBlogSearchClientRequest(
     // 검색을 원하는 질의어
     // 특정 블로그 글만 검색하고 싶은 경우, 블로그 url과 검색어를 공백(' ') 구분자로 넣을 수 있음
     val query: String,

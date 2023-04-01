@@ -2,17 +2,21 @@ package bj.max.lim.blog.search.outbound.webclient.client
 
 import bj.max.lim.blog.search.outbound.webclient.configuration.NaverBlogSearchProperties
 import bj.max.lim.blog.search.outbound.webclient.exception.BlogSearchErrorHandler
-import bj.max.lim.blog.search.outbound.webclient.request.NaverBlogSearchRequest
-import bj.max.lim.blog.search.outbound.webclient.response.NaverBlogSearchResponse
+import bj.max.lim.blog.search.outbound.webclient.request.BlogSearchClientRequest
+import bj.max.lim.blog.search.outbound.webclient.request.mapToNaverBlogSearchRequest
+import bj.max.lim.blog.search.outbound.webclient.response.BlogSearchClientResponse
+import bj.max.lim.blog.search.outbound.webclient.response.NaverBlogSearchClientResponse
+import kotlinx.coroutines.reactor.awaitSingle
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
 
 @Component
+@Order(2)
 class NaverBlogSearchClient(
     webClientBuilder: WebClient.Builder,
     naverBlogSearchProperties: NaverBlogSearchProperties,
-) {
+) : BlogSearchClient {
     private val webClient = webClientBuilder
         .baseUrl(BASE_URL)
         .defaultHeaders {
@@ -22,15 +26,17 @@ class NaverBlogSearchClient(
         .filter(BlogSearchErrorHandler.errorHandler())
         .build()
 
-    suspend fun send(request: NaverBlogSearchRequest): Mono<NaverBlogSearchResponse> {
+    override suspend fun send(request: BlogSearchClientRequest): BlogSearchClientResponse {
+        val naverRequest = request.mapToNaverBlogSearchRequest()
         return webClient.get()
             .uri {
                 it.path(BLOG_SEARCH_URL)
-                    .queryParams(request.toQueryParams())
+                    .queryParams(naverRequest.toQueryParams())
                     .build()
             }
             .retrieve()
-            .bodyToMono(NaverBlogSearchResponse::class.java)
+            .bodyToMono(NaverBlogSearchClientResponse::class.java)
+            .awaitSingle()
     }
 
     companion object {

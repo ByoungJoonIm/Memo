@@ -1,7 +1,6 @@
 package bj.max.lim.blog.search.domain.service.iface
 
-import bj.max.lim.blog.search.outbound.webclient.request.KakaoBlogSearchRequest
-import bj.max.lim.blog.search.outbound.webclient.request.NaverBlogSearchRequest
+import bj.max.lim.blog.search.outbound.webclient.request.BlogSearchClientRequest
 import com.google.common.annotations.VisibleForTesting
 
 /**
@@ -47,26 +46,14 @@ data class BlogSearchContext(
     }
 }
 
-fun BlogSearchContext.mapToKakaoBlogSearchRequest(): KakaoBlogSearchRequest {
-    return KakaoBlogSearchRequest(
-        query = this.query,
-        page = this.page,
-        size = pageSize,
-        sort = when (blogSearchSortingOption) {
-            BlogSearchContext.BlogSearchSortingOption.ACCURACY_FIRST -> KakaoBlogSearchRequest.SortingOption.ACCURACY_FIRST
-            BlogSearchContext.BlogSearchSortingOption.RECENCY_FIRST -> KakaoBlogSearchRequest.SortingOption.RECENCY_FIRST
-        }
-    )
-}
-
-fun BlogSearchContext.mapToNaverBlogSearchRequest(): NaverBlogSearchRequest {
-    return NaverBlogSearchRequest(
-        query = this.query,
-        display = this.pageSize,
-        start = (this.page - 1) * this.pageSize + 1,
-        sort = when (blogSearchSortingOption) {
-            BlogSearchContext.BlogSearchSortingOption.ACCURACY_FIRST -> NaverBlogSearchRequest.SortingOption.ACCURACY_FIRST
-            BlogSearchContext.BlogSearchSortingOption.RECENCY_FIRST -> NaverBlogSearchRequest.SortingOption.RECENCY_FIRST
+fun BlogSearchContext.mapToBlogSearchClientRequest(): BlogSearchClientRequest {
+    return BlogSearchClientRequest(
+        query = query,
+        page = page,
+        pageSize = pageSize,
+        blogSearchSortingOption = when (blogSearchSortingOption) {
+            BlogSearchContext.BlogSearchSortingOption.ACCURACY_FIRST -> BlogSearchClientRequest.BlogSearchSortingOption.ACCURACY_FIRST
+            BlogSearchContext.BlogSearchSortingOption.RECENCY_FIRST -> BlogSearchClientRequest.BlogSearchSortingOption.RECENCY_FIRST
         }
     )
 }

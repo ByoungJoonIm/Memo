@@ -3,15 +3,22 @@ package bj.max.lim.blog.search.outbound.webclient.response
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 /**
  * https://developers.kakao.com/docs/latest/ko/daum-search/dev-guide#search-blog-response
  * */
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class KakaoBlogSearchResponse(
+data class KakaoBlogSearchClientResponse(
     val meta: Meta,
     val documents: List<KakaoDocument>,
-)
+) : BlogSearchClientResponse {
+    override val total: Int
+        get() = meta.totalCount
+    override val blogList: List<BlogClientResponse>
+        get() = documents
+}
 
 data class Meta(
     // 검색된 문서 수
@@ -29,17 +36,18 @@ data class Meta(
 
 data class KakaoDocument(
     // 블로그 글 제목
-    val title: String,
+    override val title: String,
 
     // 블로그 글 요약
-    val contents: String,
+    @JsonProperty("contents")
+    override val description: String,
 
     // 블로그 글 URL
-    val url: String,
+    override val url: String,
 
     // 블로그의 이름
     @JsonProperty("blogname")
-    val blogName: String,
+    override val blogName: String,
 
     // 검색 시스템에서 추출한 대표 미리보기 이미지 URL, 미리보기 크기 및 화질은 변경될 수 있음
     val thumbnail: String,
@@ -47,4 +55,7 @@ data class KakaoDocument(
     // 블로그 글 작성시간, ISO 8601
     // [YYYY]-[MM]-[DD]T[hh]:[mm]:[ss].000+[tz]
     val datetime: Instant,
-)
+) : BlogClientResponse {
+    override val postDate: LocalDate
+        get() = LocalDate.ofInstant(datetime, ZoneId.of("Asia/Seoul"))
+}

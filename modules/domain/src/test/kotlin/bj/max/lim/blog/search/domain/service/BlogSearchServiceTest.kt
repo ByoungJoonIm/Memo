@@ -1,10 +1,10 @@
 package bj.max.lim.blog.search.domain.service
 
-import bj.max.lim.blog.search.domain.aggregate.impl.KakaoBlogSearchImpl
+import bj.max.lim.blog.search.domain.aggregate.impl.BlogSearchImpl
 import bj.max.lim.blog.search.domain.repository.BlogSearchRepository
 import bj.max.lim.blog.search.domain.repository.KeywordRankRepository
 import bj.max.lim.blog.search.domain.service.iface.BlogSearchContext
-import bj.max.lim.blog.search.outbound.webclient.response.KakaoBlogSearchResponse
+import bj.max.lim.blog.search.outbound.webclient.response.KakaoBlogSearchClientResponse
 import bj.max.lim.blog.search.outbound.webclient.response.KakaoDocument
 import bj.max.lim.blog.search.outbound.webclient.response.Meta
 import kotlinx.coroutines.runBlocking
@@ -44,7 +44,7 @@ class BlogSearchServiceTest {
             page = 1,
             pageSize = 2,
         )
-        val kakaoBlogSearchResponse = KakaoBlogSearchResponse(
+        val kakaoBlogSearchResponse = KakaoBlogSearchClientResponse(
             meta = Meta(
                 totalCount = 1000,
                 pageableCount = 10,
@@ -53,7 +53,7 @@ class BlogSearchServiceTest {
             documents = listOf(
                 KakaoDocument(
                     title = "오늘도 떡볶이 한그릇",
-                    contents = "오늘 하루는 가볍게 떡볶이 한그릇으로 마무리 해보세요~ 누가먹어도 맛있는 레시피를 알려드립니다~!",
+                    description = "오늘 하루는 가볍게 떡볶이 한그릇으로 마무리 해보세요~ 누가먹어도 맛있는 레시피를 알려드립니다~!",
                     url = "https://blog.kakao.com/1534132",
                     blogName = "매일떡볶이",
                     thumbnail = "https://blog.kakao.com/thumbnail/1534132",
@@ -61,7 +61,7 @@ class BlogSearchServiceTest {
                 ),
                 KakaoDocument(
                     title = "오늘도 치킨 한그릇",
-                    contents = "오늘 하루는 가볍게 치킨 한그릇으로 마무리 해보세요~ 누가먹어도 맛있는 레시피를 알려드립니다~!",
+                    description = "오늘 하루는 가볍게 치킨 한그릇으로 마무리 해보세요~ 누가먹어도 맛있는 레시피를 알려드립니다~!",
                     url = "https://blog.kakao.com/15341323",
                     blogName = "매일치킨",
                     thumbnail = "https://blog.kakao.com/thumbnail/15341323",
@@ -69,7 +69,7 @@ class BlogSearchServiceTest {
                 )
             )
         )
-        val blogSearch = KakaoBlogSearchImpl(
+        val blogSearch = BlogSearchImpl(
             kakaoBlogSearchResponse
         )
 
